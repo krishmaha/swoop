@@ -1,39 +1,58 @@
 import { StyleSheet } from 'react-native';
 
- const styles = StyleSheet.create({
-  locationConfigContainer: {
-    backgroundColor: '#000038',
+const styles = StyleSheet.create({
+  locationScreenContainer: {
     flex: 1,
+    backgroundColor: '#f0f0f0', 
   },
   container: {
-    height: 100,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 50,
-  },
-  text: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    fontFamily: 'DMBold',
-    textAlign: 'center',
+    flex: 1,
     paddingHorizontal: 20,
-    color: '#fff',
   },
   textInputContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: 80,
+    backgroundColor: '#fff',
+    borderTopWidth: 0,
+    borderBottomWidth: 0,
+    borderRadius: 20,
+    paddingHorizontal: 10,
   },
   textInput: {
-    height: 40,
-    width: '90%',
-    borderColor: 'white',
-    borderWidth: 1,
-    borderRadius: 24,
-    padding: 10,
-    color: 'black',
+    height: 44,
+    color: '#000',
+    fontSize: 16,
+  },
+  predefinedPlacesDescription: {
+    color: '#1faadb',
+  },
+  listView: {
+    backgroundColor: '#f0f0f0', 
+    borderRadius: 5,
+    marginHorizontal: 10,
+  },
+  row: {
+    paddingVertical: 10,
+    paddingHorizontal: 15,
     backgroundColor: '#fff',
+  },
+  title: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: '#000',
+  },
+  address: {
+    fontSize: 14,
+    color: '#555',
+  },
+  headingText: {
+    fontSize: 32,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    paddingHorizontal: 20,
+  },
+  headingContainer: {
+    height: 200,
+    justifyContent: 'center',
   }
 });
 
-export default styles; 
+export default styles;
