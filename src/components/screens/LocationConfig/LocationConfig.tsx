@@ -2,6 +2,9 @@ import React, { useState, useRef, useEffect } from 'react';
 import { View, Text } from 'react-native';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import LocationNextButton from '../../buttons/LocationNextButton';
+import { useNavigation, NavigationProp }from '@react-navigation/native'
+import HomeScreen from '../HomeScreen/HomeScreen';
+import { RootStackParamList } from '../../../navigation';
 import styles from './locationconfig.style';
 
 import type { GooglePlacesAutocompleteRef } from 'react-native-google-places-autocomplete';
@@ -14,6 +17,7 @@ const LocationConfig = () => {
   const [isFocused, setIsFocused] = useState(false);
 
   const ref = useRef<GooglePlacesAutocompleteRef>(null);
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
   useEffect(() => {
     if (ref.current) {
@@ -28,6 +32,11 @@ const LocationConfig = () => {
       return () => clearInterval(interval);
     }
   }, [ref.current]);
+
+  const handleNextPress = () => {
+    console.log('Next button pressed: navigation to homescreen');
+    navigation.navigate('HomeScreen');
+  }
 
   return (
     <View style={styles.locationScreenContainer}>
@@ -66,7 +75,7 @@ const LocationConfig = () => {
       </View>
       {selectedLocation && !isDropdownOpen && !isFocused && (
         <View style={styles.nextButtonContainer}>
-          <LocationNextButton />
+          <LocationNextButton onPress={handleNextPress}/>
         </View>
       )}
     </View>
