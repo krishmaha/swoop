@@ -12,7 +12,7 @@ const handleLocationSubmit = () => {
 }
 
 return (
-  <View>
+  <View style={styles.locationConfigContainer}>
     <View style={styles.container}>
       <Text style={styles.text}>Where are you looking for events?</Text>
     </View>
