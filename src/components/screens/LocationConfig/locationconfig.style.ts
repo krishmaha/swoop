@@ -52,7 +52,11 @@ const styles = StyleSheet.create({
   headingContainer: {
     height: 200,
     justifyContent: 'center',
-  }
+  },
+  nextButtonContainer: {
+    justifyContent: 'flex-end',
+    paddingBottom: 100,
+  },
 });
 
 export default styles;
