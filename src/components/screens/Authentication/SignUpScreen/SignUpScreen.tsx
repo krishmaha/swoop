@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
 import auth from '@react-native-firebase/auth';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
@@ -6,11 +6,17 @@ import { RootStackParamList } from 'src/navigation';
 import styles from './signupscreen.style';
 
 const SignUpScreen = () => {
-  const [email, setEmail] = React.useState('');
-  const [password, setPassword] = React.useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
   const handleSignUp = () => {
+    if (password !== confirmPassword) {
+      Alert.alert('Passwords do not match!');
+      return;
+    }
+
     auth()
       .createUserWithEmailAndPassword(email, password)
       .then(() => {
@@ -20,16 +26,14 @@ const SignUpScreen = () => {
       .catch(error => {
         if (error.code === 'auth/email-already-in-use') {
           Alert.alert('That email address is already in use!');
-        }
-        if (error.code === 'auth/invalid-email') {
+        } else if (error.code === 'auth/invalid-email') {
           Alert.alert('That email address is invalid!');
+        } else {
+          Alert.alert(error.message);
+          console.log(error);
         }
-        // Alert.alert(error.message);
-        console.log(error);
-      })
-
-  }
-
+      });
+  };
 
   // const signUpTestFunction = () => {
   //   auth().createUserWithEmailAndPassword("email", "password").then(() => {
@@ -42,27 +46,40 @@ const SignUpScreen = () => {
 
   return (
     <View style={styles.container}>
+      <Text style={styles.header}>Sign Up</Text>
       <TextInput
         style={styles.input}
-        placeholder='email'
+        placeholder='Email'
         value={email}
         onChangeText={setEmail}
         keyboardType='email-address'
         autoCapitalize='none'
+        placeholderTextColor="#ccc"
       />
       <TextInput
         style={styles.input}
-        placeholder='password'
+        placeholder='Password'
         value={password}
         onChangeText={setPassword}
         secureTextEntry
         autoCapitalize='none'
+        placeholderTextColor="#ccc"
       />
-      <TouchableOpacity onPress={handleSignUp}>
-        <Text>Sign Up</Text>
+      <TextInput
+        style={styles.input}
+        placeholder='Confirm Password'
+        value={confirmPassword}
+        onChangeText={setConfirmPassword}
+        secureTextEntry
+        autoCapitalize='none'
+        placeholderTextColor="#ccc"
+      />
+      <TouchableOpacity onPress={handleSignUp} style={styles.signUpButton}>
+        <Text style={styles.signUpButtonText}>Sign Up</Text>
       </TouchableOpacity>
     </View>
-  )
-}
+  );
+};
+
 
 export default SignUpScreen;
