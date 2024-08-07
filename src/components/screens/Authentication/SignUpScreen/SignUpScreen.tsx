@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
 import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
 import { RootStackParamList } from 'src/navigation';
 import styles from './signupscreen.style';
@@ -9,6 +10,9 @@ const SignUpScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [surname, setSurname] = useState('');
+
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
   const handleSignUp = () => {
@@ -19,7 +23,13 @@ const SignUpScreen = () => {
 
     auth()
       .createUserWithEmailAndPassword(email, password)
-      .then(() => {
+      .then((userCredential) => {
+        const user = userCredential.user;
+        firestore().collection('users').doc(user.uid).set({
+          firstName,
+          surname,
+          email,
+        });
         Alert.alert('User account created & signed in!');
         navigation.navigate('LocationConfigScreen');
       })
@@ -47,6 +57,20 @@ const SignUpScreen = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Sign Up</Text>
+      <TextInput
+        style={styles.input}
+        placeholder='First Name'
+        value={firstName}
+        onChangeText={setFirstName}
+        placeholderTextColor="#ccc"
+      />
+      <TextInput
+        style={styles.input}
+        placeholder='Surname'
+        value={surname}
+        onChangeText={setSurname}
+        placeholderTextColor="#ccc"
+      />
       <TextInput
         style={styles.input}
         placeholder='Email'

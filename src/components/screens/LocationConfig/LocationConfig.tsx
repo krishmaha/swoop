@@ -3,6 +3,8 @@ import { View, Text } from 'react-native';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import LocationNextButton from '../../buttons/LocationNextButton';
 import { useNavigation, NavigationProp }from '@react-navigation/native'
+import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 import HomeScreen from '../HomeScreen/HomeScreen';
 import { RootStackParamList } from '../../../navigation';
 import styles from './locationconfig.style';
@@ -15,9 +17,24 @@ const LocationConfig = () => {
   const [selectedLocation, setSelectedLocation] = useState('');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
-
+  const [firstName, setFirstName] = useState<string | null>(null);
+  useEffect(() => {
+    const fetchUser = async () => {
+      const currentUser = auth().currentUser;
+      if (currentUser) {
+        const userDocument = await firestore().collection('users').doc(currentUser.uid).get();
+        if (userDocument.exists) {
+          const userData = userDocument.data();
+          setFirstName(userData?.firstName || null);
+        }
+      }
+    };
+    fetchUser();    
+  }, []);
+  
   const ref = useRef<GooglePlacesAutocompleteRef>(null);
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+
 
   useEffect(() => {
     if (ref.current) {
@@ -41,6 +58,9 @@ const LocationConfig = () => {
   return (
     <View style={styles.locationScreenContainer}>
       <View style={styles.headingContainer}>
+        {firstName && (
+          <Text style={styles.headingText}>Hi, {firstName}!</Text>
+        )}
         <Text style={styles.headingText}>Where are you looking for events?</Text>
       </View>
       <View style={styles.container}>
